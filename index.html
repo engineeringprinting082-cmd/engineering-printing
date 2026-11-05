@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Engineering Printing | 3D printed engineering desk models</title>
+  <meta name="description" content="3D printed turbofan, aircraft and engineering desk models, designed and printed to order in the Greater Toronto Area.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Sticky top bar: brand, section links and the cart button with a live item count -->
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="Engineering Printing home">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="14" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 4v24M4 16h24M7.5 7.5l17 17M24.5 7.5l-17 17" stroke="currentColor" stroke-width="1.6"/><circle cx="16" cy="16" r="4" fill="currentColor"/></svg>
+      <span>Engineering Printing</span>
+    </a>
+    <nav>
+      <a href="#shop">Shop</a>
+      <a href="#how">How it works</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <button class="cart-btn" id="openCart" type="button">Cart <span id="cartCount">0</span></button>
+  </header>
+
+  <main id="top">
+    <!-- Hero: uses Humza's own turbofan render on a blueprint-style grid -->
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Designed by an aerospace engineering student</p>
+        <h1>Engineering you can put on your desk.</h1>
+        <p class="lead">Turbofans, aircraft and custom plaques, printed to order in the Greater Toronto Area.</p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#shop">Shop the collection</a>
+          <span class="pill">Students save 10%</span>
+        </div>
+      </div>
+      <img class="hero-img" src="turbofan-cutaway.jpg" alt="CAD cutaway of a high-bypass turbofan showing the fan and compressor stages">
+    </section>
+
+    <!-- Catalogue: cards are rendered by app.js from the PRODUCTS list -->
+    <section id="shop" class="section">
+      <div class="section-head">
+        <h2>The collection</h2>
+        <div class="filters" id="filters" role="group" aria-label="Filter products"></div>
+      </div>
+      <div class="grid" id="productGrid"></div>
+      <p class="fine">CAD renders and illustrations show the design. Printed items show visible layer lines and will vary slightly in finish.</p>
+    </section>
+
+    <section id="how" class="section band">
+      <h2>How ordering works</h2>
+      <ol class="steps">
+        <li><strong>Choose</strong><span>Pick your items, colours and quantities.</span></li>
+        <li><strong>Send your order</strong><span>No payment is taken on this site.</span></li>
+        <li><strong>Get confirmation</strong><span>We email your final total and e-Transfer details.</span></li>
+        <li><strong>Printed for you</strong><span>Your order is printed after payment, then shipped or set for pickup.</span></li>
+      </ol>
+    </section>
+
+    <section id="faq" class="section faq">
+      <h2>Questions</h2>
+      <details><summary>How does the student discount work?</summary><p>Enter your school email at checkout. If it is a recognized school address, 10% comes off your items. We confirm eligibility before accepting the order.</p></details>
+      <details><summary>What does shipping cost?</summary><p>Shipping is a flat $12 CAD anywhere in Canada. Pickup in the Greater Toronto Area is free.</p></details>
+      <details><summary>How long will my order take?</summary><p>Most orders are printed within 3 to 7 days of payment. Shipping time is extra.</p></details>
+      <details><summary>What are the models made of?</summary><p>PLA plastic. These are display pieces, not functional parts, so keep them away from heat and direct sun.</p></details>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Engineering Printing, Greater Toronto Area. Prices in CAD.</p>
+    <p>An independent maker. Not affiliated with or endorsed by any aerospace manufacturer. Original designs inspired by general engineering concepts.</p>
+    <p><a href="mailto:engineeringprinting082@gmail.com">engineeringprinting082@gmail.com</a></p>
+  </footer>
+
+  <!-- Product detail dialog: filled in by app.js when a card is opened -->
+  <dialog id="productDialog" class="dialog">
+    <form method="dialog"><button class="close" aria-label="Close">&times;</button></form>
+    <div id="productBody"></div>
+  </dialog>
+
+  <!-- Cart and checkout drawer -->
+  <dialog id="cartDialog" class="dialog drawer">
+    <form method="dialog"><button class="close" aria-label="Close">&times;</button></form>
+    <h2>Your cart</h2>
+    <div id="cartItems"></div>
+    <form id="checkoutForm" novalidate>
+      <h3>Your details</h3>
+      <label>Full name <input name="name" required autocomplete="name"></label>
+      <label>Email <input name="email" type="email" required autocomplete="email"></label>
+      <label>School email for student discount (optional)
+        <input name="schoolEmail" id="schoolEmail" type="email" placeholder="you@yourschool.ca">
+      </label>
+      <p class="hint" id="studentHint"></p>
+      <fieldset>
+        <legend>Delivery</legend>
+        <label class="radio"><input type="radio" name="delivery" value="ship" checked> Ship in Canada ($12 flat)</label>
+        <label class="radio"><input type="radio" name="delivery" value="pickup"> GTA pickup (free)</label>
+      </fieldset>
+      <label id="addressField">Shipping address <textarea name="address" rows="3" autocomplete="street-address"></textarea></label>
+      <label>Notes (optional) <textarea name="notes" rows="2"></textarea></label>
+      <!-- Hidden trap field: real people never fill this in, so bots that do are ignored -->
+      <input class="trap" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <dl class="totals" id="totals"></dl>
+      <p class="error" id="formError" role="alert"></p>
+      <button class="btn primary wide" id="submitOrder" type="submit">Send order</button>
+      <p class="fine">No payment now. We will email your total and e-Transfer details.</p>
+    </form>
+    <div id="orderDone" hidden></div>
+  </dialog>
+
+  <script src="products.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
