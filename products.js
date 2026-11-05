@@ -1,74 +1,59 @@
 // Store catalogue. Edit this file to change prices, colours or products.
-// price is in CAD. images point to renders in . art names an original
-// inline illustration in app.js, used where no render exists yet.
+// price is in CAD. art names an original drawing in art.js. Swap in a real
+// photo of a finished print by adding: photo: "file-name.jpg"
 
 // Shared colour choices, matched to common PLA filament.
 const MODEL_COLOURS = ["White", "Navy Blue", "Silver Grey", "Black"];
+const TOOL_COLOURS = ["Orange", "Black", "Silver Grey", "Navy Blue"];
 
-// The two-tone plaques keep the blue and white look without any company logo.
+// Two-tone plaque choices. Plaques are text only, with no logos.
 const PLAQUE_COLOURS = ["Blue text on white", "White text on blue"];
 
 const PRODUCTS = [
   {
-    id: "turbofan-cutaway", name: "High-Bypass Turbofan Cutaway", category: "Engines", price: 49,
-    size: "About 18 cm long", colours: MODEL_COLOURS,
-    blurb: "A sectioned turbofan that shows the fan, compressor and turbine stages.",
-    images: ["turbofan-cutaway.jpg", "turbofan-exterior.jpg"],
+    id: "turbofan-cutaway", name: "Sectioned Turbofan Display", category: "Display", price: 89, tag: "Flagship",
+    size: "About 30 cm long, multi-part build", colours: MODEL_COLOURS, art: "turbofan",
+    blurb: "A cutaway turbofan showing the fan, compressor and turbine stages on a matching stand.",
   },
   {
-    id: "turbofan-exploded", name: "Exploded Turbofan Display", category: "Engines", price: 59,
-    size: "About 22 cm long", colours: MODEL_COLOURS,
-    blurb: "Every major stage pulled apart along the shaft on a display stand.",
-    images: ["turbofan-exploded.jpg"],
+    id: "concept-jet", name: "Concept Jet Desk Model", category: "Display", price: 34,
+    size: "About 20 cm long, with stand", colours: MODEL_COLOURS, art: "jet",
+    blurb: "An original twin-tail concept jet, angled on a faceted display stand.",
   },
   {
-    id: "turbofan-mini", name: "Mini Turbofan Desk Model", category: "Engines", price: 29,
-    size: "About 10 cm long", colours: MODEL_COLOURS,
-    blurb: "A compact nacelle and fan with a fan that spins freely.",
-    images: ["turbofan-exterior.jpg"],
+    id: "engineering-stick", name: "Engineering Stick Gift Box", category: "Gifts", price: 15, tag: "Gift pick",
+    size: "About 25 cm long", colours: ["White box", "Black box"], art: "stick",
+    blurb: "One highly advanced stick, presented in its own printed case. A joke every engineer will get.",
   },
   {
-    id: "airliner", name: "Twin-Engine Airliner Model", category: "Aircraft", price: 34,
-    size: "About 20 cm wingspan", colours: MODEL_COLOURS, art: "airliner",
-    blurb: "A clean, generic twin-engine airliner on a desk stand.",
+    id: "drill-square", name: "Layout Square and Drill Gauge", category: "Tools", price: 14,
+    size: "About 15 x 17 cm", colours: TOOL_COLOURS, art: "square",
+    blurb: "A triangular layout square with ruler edges, angle marks and drill size holes from 3 to 15 mm.",
   },
   {
-    id: "delta-jet", name: "Delta-Wing Jet Model", category: "Aircraft", price: 34,
-    size: "About 16 cm long", colours: MODEL_COLOURS, art: "delta",
-    blurb: "An original concept jet with a swept delta wing.",
+    id: "marking-gauge", name: "Centre-Finding Marking Gauge", category: "Tools", price: 9,
+    size: "About 15 cm long", colours: TOOL_COLOURS, art: "gauge",
+    blurb: "Hooks over a board edge to find centre and mark offsets of 15 to 30 mm, with hex sockets for pencils.",
   },
   {
-    id: "vtol-drone", name: "Blended-Wing VTOL Drone", category: "Aircraft", price: 45,
-    size: "About 20 cm wingspan", colours: MODEL_COLOURS,
-    blurb: "A scale model of an original tilt-motor VTOL drone design.",
-    images: ["vtol-drone.jpg", "vtol-exploded.jpg"],
+    id: "locking-pliers", name: "Print-in-Place Locking Pliers", category: "Tools", price: 16,
+    size: "About 14 cm long", colours: TOOL_COLOURS, art: "pliers",
+    blurb: "Working locking pliers that come off the printer fully assembled. A great desk conversation piece.",
   },
   {
-    id: "mars-rover", name: "Planetary Rover Concept", category: "Space", price: 55,
-    size: "About 14 cm long", colours: MODEL_COLOURS,
-    blurb: "An original planetary rover concept with deployed solar panels.",
-    images: ["rover.jpg"],
+    id: "keyboard-tray", name: "Flip-Down Keyboard Tray", category: "Desk", price: 59, tag: "Desk upgrade",
+    size: "Fits most full-size keyboards", colours: ["Orange and white", "Black and white"], art: "tray",
+    blurb: "A geared under-desk tray that folds your keyboard out of the way. Mounting screws required.",
   },
   {
-    id: "wind-tunnel", name: "Desk Wind Tunnel Model", category: "Space", price: 39,
-    size: "About 18 cm long", colours: MODEL_COLOURS,
-    blurb: "A scale model of an open-circuit subsonic wind tunnel.",
-    images: ["wind-tunnel.jpg"],
+    id: "keyboard-knob", name: "Clip-On Knob for Logitech MX Keyboards", category: "Desk", price: 34, tag: "New",
+    size: "Clips onto the top edge of the keyboard", colours: ["Black and gold", "Black and orange"], art: "knob",
+    blurb: "Spin to control your volume and more from a chunky knurled knob on your MX keyboard.",
   },
   {
-    id: "custom-plaque", name: "Custom Desk Plaque", category: "Custom", price: 22,
-    size: "About 15 cm wide", colours: PLAQUE_COLOURS, art: "plaque", custom: "plaque",
-    blurb: "Your name, team or project in two-colour blue and white.",
-  },
-  {
-    id: "custom-keychain", name: "Custom Name Keychain", category: "Custom", price: 9,
-    size: "About 7 cm wide", colours: PLAQUE_COLOURS, art: "plaque", custom: "keychain",
-    blurb: "A small two-colour tag with your own short text.",
-  },
-  {
-    id: "fan-keychain", name: "Turbofan Fan Keychain", category: "Custom", price: 10,
-    size: "About 4 cm across", colours: MODEL_COLOURS, art: "fan",
-    blurb: "A tiny fan disc that spins on your keys.",
+    id: "custom-plaque", name: "Custom Two-Colour Plaque", category: "Gifts", price: 22,
+    size: "About 20 cm wide", colours: PLAQUE_COLOURS, art: "plaque", custom: "plaque",
+    blurb: "Your name, team or project in raised blue and white lettering. Text only.",
   },
 ];
 

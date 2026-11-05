@@ -3,82 +3,89 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Engineering Printing | 3D printed engineering desk models</title>
-  <meta name="description" content="3D printed turbofan, aircraft and engineering desk models, designed and printed to order in the Greater Toronto Area.">
-  <link rel="stylesheet" href="styles.css">
+  <title>Engineering Printing | 3D printed gear for engineers</title>
+  <meta name="description" content="3D printed engine displays, workshop tools and desk upgrades for engineers, printed to order in the Greater Toronto Area.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <!-- The version number forces browsers to load new files after each update -->
+  <link rel="stylesheet" href="styles.css?v=2">
 </head>
 <body>
-  <!-- Sticky top bar: brand, section links and the cart button with a live item count -->
   <header class="topbar">
-    <a class="brand" href="#top" aria-label="Engineering Printing home">
-      <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="14" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 4v24M4 16h24M7.5 7.5l17 17M24.5 7.5l-17 17" stroke="currentColor" stroke-width="1.6"/><circle cx="16" cy="16" r="4" fill="currentColor"/></svg>
-      <span>Engineering Printing</span>
-    </a>
+    <a class="brand" href="#top" aria-label="Engineering Printing home"><span class="mark">EP</span> Engineering Printing</a>
     <nav>
       <a href="#shop">Shop</a>
-      <a href="#how">How it works</a>
+      <a href="#how">Process</a>
       <a href="#faq">FAQ</a>
     </nav>
     <button class="cart-btn" id="openCart" type="button">Cart <span id="cartCount">0</span></button>
   </header>
 
   <main id="top">
-    <!-- Hero: uses Humza's own turbofan render on a blueprint-style grid -->
     <section class="hero">
       <div class="hero-copy">
-        <p class="eyebrow">Designed by an aerospace engineering student</p>
-        <h1>Engineering you can put on your desk.</h1>
-        <p class="lead">Turbofans, aircraft and custom plaques, printed to order in the Greater Toronto Area.</p>
+        <p class="eyebrow">DWG NO. EP-001 / PRINTED IN THE GTA</p>
+        <h1>Built for people who <em>take things apart.</em></h1>
+        <p class="lead">Engine displays, shop tools and desk upgrades, designed by an aerospace engineering student and printed to order.</p>
         <div class="hero-actions">
-          <a class="btn primary" href="#shop">Shop the collection</a>
-          <span class="pill">Students save 10%</span>
+          <a class="btn primary" href="#shop">Browse the catalogue</a>
+          <span class="chip">Students save 10%</span>
         </div>
+        <ul class="specs">
+          <li><b>9</b> designs</li>
+          <li><b>$12</b> flat Canada shipping</li>
+          <li><b>Free</b> GTA pickup</li>
+        </ul>
       </div>
-      <img class="hero-img" src="turbofan-cutaway.jpg" alt="CAD cutaway of a high-bypass turbofan showing the fan and compressor stages">
+      <!-- Spinning fan, drawn by art.js. Motion stops for visitors who prefer less -->
+      <div class="hero-fan" id="heroFan"></div>
     </section>
 
-    <!-- Catalogue: cards are rendered by app.js from the PRODUCTS list -->
+    <!-- Moving strip of plain text between the hero and the shop -->
+    <div class="ticker" aria-hidden="true"><div>PRINTED TO ORDER &nbsp;/&nbsp; DESIGNED IN CAD &nbsp;/&nbsp; MADE IN ONTARIO &nbsp;/&nbsp; PRINTED TO ORDER &nbsp;/&nbsp; DESIGNED IN CAD &nbsp;/&nbsp; MADE IN ONTARIO &nbsp;/&nbsp; PRINTED TO ORDER &nbsp;/&nbsp; DESIGNED IN CAD &nbsp;/&nbsp; MADE IN ONTARIO &nbsp;/&nbsp;</div></div>
+
     <section id="shop" class="section">
       <div class="section-head">
-        <h2>The collection</h2>
+        <div><p class="eyebrow">01 / CATALOGUE</p><h2>Pick your parts</h2></div>
         <div class="filters" id="filters" role="group" aria-label="Filter products"></div>
       </div>
       <div class="grid" id="productGrid"></div>
-      <p class="fine">CAD renders and illustrations show the design. Printed items show visible layer lines and will vary slightly in finish.</p>
+      <p class="fine">Drawings show the design concept. Printed items have visible layer lines and vary slightly in finish.</p>
     </section>
 
     <section id="how" class="section band">
-      <h2>How ordering works</h2>
+      <p class="eyebrow">02 / PROCESS</p>
+      <h2>From order to desk</h2>
       <ol class="steps">
         <li><strong>Choose</strong><span>Pick your items, colours and quantities.</span></li>
         <li><strong>Send your order</strong><span>No payment is taken on this site.</span></li>
-        <li><strong>Get confirmation</strong><span>We email your final total and e-Transfer details.</span></li>
-        <li><strong>Printed for you</strong><span>Your order is printed after payment, then shipped or set for pickup.</span></li>
+        <li><strong>Confirm</strong><span>We email your final total and e-Transfer details.</span></li>
+        <li><strong>Print</strong><span>Printed after payment, then shipped or set for pickup.</span></li>
       </ol>
     </section>
 
     <section id="faq" class="section faq">
-      <h2>Questions</h2>
+      <p class="eyebrow">03 / QUESTIONS</p>
+      <h2>Good to know</h2>
       <details><summary>How does the student discount work?</summary><p>Enter your school email at checkout. If it is a recognized school address, 10% comes off your items. We confirm eligibility before accepting the order.</p></details>
       <details><summary>What does shipping cost?</summary><p>Shipping is a flat $12 CAD anywhere in Canada. Pickup in the Greater Toronto Area is free.</p></details>
       <details><summary>How long will my order take?</summary><p>Most orders are printed within 3 to 7 days of payment. Shipping time is extra.</p></details>
-      <details><summary>What are the models made of?</summary><p>PLA plastic. These are display pieces, not functional parts, so keep them away from heat and direct sun.</p></details>
+      <details><summary>What are the items made of?</summary><p>PLA plastic. Display pieces and light-duty tools only, so keep them away from heat and direct sun.</p></details>
     </section>
   </main>
 
   <footer class="footer">
     <p>Engineering Printing, Greater Toronto Area. Prices in CAD.</p>
-    <p>An independent maker. Not affiliated with or endorsed by any aerospace manufacturer. Original designs inspired by general engineering concepts.</p>
+    <p>An independent maker. Not affiliated with or endorsed by any aerospace manufacturer or by Logitech. Logitech and MX are trademarks of their owner and are used only to describe compatibility.</p>
     <p><a href="mailto:engineeringprinting082@gmail.com">engineeringprinting082@gmail.com</a></p>
   </footer>
 
-  <!-- Product detail dialog: filled in by app.js when a card is opened -->
   <dialog id="productDialog" class="dialog">
     <form method="dialog"><button class="close" aria-label="Close">&times;</button></form>
     <div id="productBody"></div>
   </dialog>
 
-  <!-- Cart and checkout drawer -->
   <dialog id="cartDialog" class="dialog drawer">
     <form method="dialog"><button class="close" aria-label="Close">&times;</button></form>
     <h2>Your cart</h2>
@@ -108,7 +115,8 @@
     <div id="orderDone" hidden></div>
   </dialog>
 
-  <script src="products.js"></script>
-  <script src="app.js"></script>
+  <script src="products.js?v=2"></script>
+  <script src="art.js?v=2"></script>
+  <script src="app.js?v=2"></script>
 </body>
 </html>

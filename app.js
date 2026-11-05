@@ -6,13 +6,6 @@
 const ORDER_ENDPOINT = "https://api.web3forms.com/submit";
 const CART_KEY = "ep-cart-v1";
 
-// Original illustrations for items that have no render yet.
-const ART = {
-  airliner: `<svg viewBox="0 0 240 160" role="img" aria-label="Illustration of a twin-engine airliner"><g fill="#13589e"><path d="M112 8c5-6 11-6 16 0 3 4 4 12 4 22v30l84 42v14l-84-22v32l20 16v10l-32-9-32 9v-10l20-16v-32l-84 22v-14l84-42V30c0-10 1-18 4-22z"/><rect x="60" y="83" width="12" height="24" rx="5"/><rect x="168" y="83" width="12" height="24" rx="5"/></g></svg>`,
-  delta: `<svg viewBox="0 0 240 160" role="img" aria-label="Illustration of a delta-wing jet"><path fill="#13589e" d="M120 4l10 46 74 84v12l-66-16-6 16h-24l-6-16-66 16v-12l74-84z"/><path fill="#0b2545" d="M114 40h12l-2 28h-8z"/></svg>`,
-  fan: `<svg viewBox="0 0 160 160" role="img" aria-label="Illustration of a fan disc keychain"><circle cx="80" cy="84" r="62" fill="none" stroke="#0b2545" stroke-width="7"/><g id="b" fill="#13589e">${Array.from({ length: 14 }, (_, i) => `<path transform="rotate(${i * 360 / 14} 80 84)" d="M80 74c3-18 12-32 17-46l-13-3c-7 13-9 31-10 48z"/>`).join("")}</g><circle cx="80" cy="84" r="12" fill="#0b2545"/><circle cx="80" cy="12" r="8" fill="none" stroke="#0b2545" stroke-width="4"/></svg>`,
-};
-
 // In-memory cart. Saving to the browser is only a convenience, so it may fail.
 let cart = loadCart();
 let activeFilter = "All";
@@ -37,27 +30,27 @@ function saveCart() {
 
 // Builds a live plaque preview. textContent keeps customer text from becoming HTML.
 function plaqueNode(text, colour) {
-  const onBlue = /on blue/.test(colour || "");
   const el = document.createElement("div");
-  el.style.cssText = `display:flex;align-items:center;justify-content:center;width:100%;aspect-ratio:3/1;max-height:100%;padding:8px;border-radius:10px;border:3px solid #13589e;font-weight:800;font-size:clamp(1rem,3vw,1.5rem);text-align:center;overflow:hidden;background:${onBlue ? "#13589e" : "#fff"};color:${onBlue ? "#fff" : "#13589e"}`;
+  el.className = /on blue/.test(colour || "") ? "plaque on-blue" : "plaque";
   el.textContent = text || "YOUR TEXT";
   return el;
 }
 
-// Returns the visual for a product: render, illustration or plaque preview.
-function visual(product, index = 0, text, colour) {
-  if (product.art === "plaque") return plaqueNode(text, colour);
-  if (product.art) {
-    const holder = document.createElement("div");
-    holder.style.cssText = "width:100%;height:100%";
-    holder.innerHTML = ART[product.art]; // Trusted: static strings defined above
-    return holder;
+// Returns the visual for a product: a real photo when one is listed, otherwise
+// the plaque preview or the original drawing.
+function visual(product, text, colour) {
+  if (product.photo) {
+    const img = new Image();
+    img.src = product.photo;
+    img.alt = product.name;
+    img.loading = "lazy";
+    return img;
   }
-  const img = new Image();
-  img.src = product.images[index];
-  img.alt = `${product.name} design render`;
-  img.loading = "lazy";
-  return img;
+  if (product.art === "plaque") return plaqueNode(text, colour);
+  const holder = document.createElement("div");
+  holder.className = "art";
+  holder.innerHTML = ART[product.art]; // Trusted: static strings from art.js
+  return holder;
 }
 
 function renderFilters() {
@@ -93,6 +86,13 @@ function renderGrid() {
     price.textContent = `${money(p.price)} CAD`;
     body.append(title, blurb, price);
     card.append(thumb, body);
+    if (p.tag) {
+      // Small corner label for highlighted products.
+      const tag = document.createElement("span");
+      tag.className = "tag";
+      tag.textContent = p.tag;
+      card.append(tag);
+    }
     card.onclick = () => openProduct(p);
     return card;
   }));
@@ -110,22 +110,6 @@ function openProduct(p) {
   stage.className = "thumb";
   stage.append(visual(p));
   left.append(stage);
-  if (p.images && p.images.length > 1) {
-    const gallery = document.createElement("div");
-    gallery.className = "gallery";
-    p.images.forEach((src, i) => {
-      const b = document.createElement("button");
-      b.type = "button";
-      b.setAttribute("aria-label", `Show view ${i + 1}`);
-      const im = new Image();
-      im.src = src;
-      im.alt = "";
-      b.append(im);
-      b.onclick = () => stage.replaceChildren(visual(p, i));
-      gallery.append(b);
-    });
-    left.append(gallery);
-  }
 
   const right = document.createElement("form");
   right.innerHTML = `<h2></h2><p class="desc"></p><p class="fine size"></p><p class="price"></p>
@@ -365,3 +349,6 @@ $("checkoutForm").addEventListener("change", () => {
 renderFilters();
 renderGrid();
 renderCart();
+
+// Fills the animated hero drawing from art.js.
+$("heroFan").innerHTML = HERO_FAN;
