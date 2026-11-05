@@ -1,9 +1,9 @@
 // Engineering Printing storefront logic: catalogue, cart, discount and orders.
-// The site is static, so orders go through FormSubmit, which emails them on.
+// The site is static, so orders go through Web3Forms, which emails them on.
 "use strict";
 
-// Delivery endpoint. FormSubmit's AJAX route returns JSON instead of redirecting.
-const ORDER_ENDPOINT = `https://formsubmit.co/ajax/${STORE.orderEmail}`;
+// Delivery endpoint. It accepts JSON and returns JSON, so the page never redirects.
+const ORDER_ENDPOINT = "https://api.web3forms.com/submit";
 const CART_KEY = "ep-cart-v1";
 
 // Original illustrations for items that have no render yet.
@@ -314,10 +314,10 @@ async function submitOrder(event) {
       method: "POST",
       headers: { "Content-Type": "application/json", Accept: "application/json" },
       body: JSON.stringify({
-        _subject: `New order ${order}: ${money(t.total)} CAD`,
-        _template: "box",
-        _captcha: "false",
-        _replyto: f.email.value.trim(),
+        access_key: STORE.web3formsKey,
+        subject: `New order ${order}: ${money(t.total)} CAD`,
+        from_name: "Engineering Printing store",
+        replyto: f.email.value.trim(),
         Order: orderText(order, t),
         Name: f.name.value.trim(),
         Email: f.email.value.trim(),
@@ -341,8 +341,13 @@ async function submitOrder(event) {
     done.innerHTML = "<h3>Order received</h3><p></p>";
     done.querySelector("p").textContent = `Your order number is ${order}. We will email your final total and e-Transfer details soon.`;
   } catch {
-    // Keep the cart so nothing is lost, and offer a direct route.
-    error.textContent = `We could not send your order. Please try again or email ${STORE.orderEmail}.`;
+    // Keep the cart so nothing is lost, and offer the same order as a prefilled email.
+    const details = `${orderText(order, t)}\n\nName: ${f.name.value.trim()}\nEmail: ${f.email.value.trim()}\nDelivery: ${ship ? f.address.value.trim() : "GTA pickup"}\nNotes: ${f.notes.value.trim() || "None"}`;
+    const link = document.createElement("a");
+    link.href = `mailto:${STORE.orderEmail}?subject=${encodeURIComponent(`Order ${order}`)}&body=${encodeURIComponent(details)}`;
+    link.textContent = "Email this order instead";
+    error.textContent = "We could not send your order. Please try again, or ";
+    error.append(link);
   } finally {
     button.disabled = false;
     button.textContent = "Send order";
