@@ -88,6 +88,19 @@ const ART = {
     <path d="M100 172l60-18 60 18-60 18z"/><path d="M100 172v10l60 18 60-18v-10"/>
     <path d="M128 172c14-8 50-8 64 0" class="accent"/><path d="M140 176l10-6M170 170l10 6" class="accent"/>`),
 
+  keycap: svg("Braille key cap with four raised dots", `
+    <path d="M60 150l34-96h132l34 96z"/><path d="M60 150v18l12 10h176l12-10v-18"/><path d="M94 54l-34 96M226 54l34 96" class="thin"/>
+    ${[[146, 82], [174, 82], [146, 106], [174, 118]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="7"/><circle cx="${x}" cy="${y}" r="3" class="thin"/>`).join("")}
+    ${dim(60, 260, 208, "RAISED DOTS")}`),
+
+  lightswitch: svg("Over-engineered geared light switch lever", `
+    <path d="M86 16h148l22 22v144l-22 22H86l-22-22V38z"/><rect x="128" y="34" width="64" height="150" rx="6" class="thin"/>
+    ${[0, 1, 2, 3, 4, 5, 6].map((i) => `<path class="thin" d="M126 ${44 + i * 10}h10M184 ${44 + i * 10}h10"/>`).join("")}
+    <circle cx="124" cy="140" r="24"/><circle cx="124" cy="140" r="8"/><circle cx="196" cy="140" r="24"/><circle cx="196" cy="140" r="8"/>
+    ${Array.from({ length: 24 }, (_, i) => { const t = i / 24 * 6.283; const c = i % 2 ? 196 : 124; return `<path class="thin" d="M${(c + 24 * Math.cos(t)).toFixed(1)} ${(140 + 24 * Math.sin(t)).toFixed(1)}L${(c + 29 * Math.cos(t)).toFixed(1)} ${(140 + 29 * Math.sin(t)).toFixed(1)}"/>`; }).join("")}
+    <path d="M196 140l52 40" class="accent"/><circle cx="252" cy="183" r="9" class="accent"/>
+    <circle cx="88" cy="40" r="4"/><circle cx="232" cy="40" r="4"/><circle cx="88" cy="180" r="4"/><circle cx="232" cy="180" r="4"/>`),
+
   plaque: svg("Custom text plaque", `<rect x="20" y="60" width="280" height="100" rx="12"/>`),
 };
 

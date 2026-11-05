@@ -51,6 +51,16 @@ const PRODUCTS = [
     blurb: "Spin to control your volume and more from a chunky knurled knob on your MX keyboard.",
   },
   {
+    id: "braille-keycaps", name: "Braille Key Caps for Logitech MX Mechanical", category: "Desk", price: 12,
+    size: "Sold as a set, tell us which keys in your notes", colours: ["Navy Blue", "Black", "White"], art: "keycap",
+    blurb: "Key caps with raised Braille dots, so you can find your keys by touch.",
+  },
+  {
+    id: "lightswitch", name: "Over-Engineered Light Switch", category: "Gifts", price: 29, tag: "Conversation piece",
+    size: "Decorative lever for a standard wall switch", colours: ["Silver and copper", "Black and brass"], art: "lightswitch",
+    blurb: "Why flick a switch when you can pull a lever through a geared rack? No wiring involved.",
+  },
+  {
     id: "custom-plaque", name: "Custom Two-Colour Plaque", category: "Gifts", price: 22,
     size: "About 20 cm wide", colours: PLAQUE_COLOURS, art: "plaque", custom: "plaque",
     blurb: "Your name, team or project in raised blue and white lettering. Text only.",
