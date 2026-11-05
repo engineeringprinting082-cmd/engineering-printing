@@ -75,7 +75,7 @@ const PRODUCTS = [
 // Pricing rules used by the cart.
 const STORE = {
   orderEmail: "engineeringprinting082@gmail.com",
-  web3formsKey: "",        // Public Web3Forms access key; orders are sent to the inbox tied to it
+  web3formsKey: "359423a3-b68b-40be-a110-309ac2b76a8d",        // Public Web3Forms access key; orders are sent to the inbox tied to it
   shippingFlat: 12,        // Flat Canadian shipping in CAD
   studentRate: 0.10,       // 10% off item subtotal
   maxQuantity: 20,         // Larger orders should email directly
