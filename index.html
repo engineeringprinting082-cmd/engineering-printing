@@ -11,7 +11,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Engineering Printing">
   <meta property="og:title" content="Engineering Printing | 3D printed gear for engineers">
-  <meta property="og:description" content="Engine displays, shop tools, desk upgrades and custom prints from your own CAD files. Printed to order in the GTA. Students save 10%.">
+  <meta property="og:description" content="Engine displays, shop tools, desk upgrades, custom car parts and prints from your own CAD files. Printed to order in the GTA. Students save 10%.">
   <meta property="og:url" content="https://engineeringprinting082-cmd.github.io/engineering-printing/">
   <meta property="og:image" content="https://engineeringprinting082-cmd.github.io/engineering-printing/og-image.jpg">
   <meta property="og:image:width" content="1200">
@@ -22,7 +22,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
   <!-- The version number forces browsers to load new files after each update -->
-  <link rel="stylesheet" href="styles.css?v=6">
+  <link rel="stylesheet" href="styles.css?v=7">
 </head>
 <body>
   <header class="topbar">
@@ -30,6 +30,7 @@
     <nav>
       <a href="#shop">Shop</a>
       <a href="#custom">Custom</a>
+      <a href="#car">Car parts</a>
       <a href="#how">Process</a>
       <a href="#faq">FAQ</a>
     </nav>
@@ -41,13 +42,13 @@
       <div class="hero-copy">
         <p class="eyebrow">DWG NO. EP-001 / PRINTED IN THE GTA</p>
         <h1>Built for people who <em>take things apart.</em></h1>
-        <p class="lead">Engine displays, shop tools and desk upgrades, designed by an aerospace engineering student and printed to order.</p>
+        <p class="lead">Engine displays, shop tools, desk upgrades and custom car parts, designed by an aerospace engineering student and printed to order.</p>
         <div class="hero-actions">
           <a class="btn primary" href="#shop">Browse the catalogue</a>
           <span class="chip">Students save 10%</span>
         </div>
         <ul class="specs">
-          <li><b>10</b> designs + custom prints</li>
+          <li><b>10</b> designs + custom work</li>
           <li><b>$12</b> flat Canada shipping</li>
           <li><b>Free</b> GTA pickup</li>
         </ul>
@@ -107,19 +108,93 @@
           <select name="delivery"><option>Ship in Canada ($12 flat)</option><option>GTA pickup (free)</option></select>
         </label>
         <label>Notes: size, strength, deadline (optional) <textarea name="notes" rows="3"></textarea></label>
-        <p class="error" id="customError" role="alert"></p>
+        <p class="error" role="alert"></p>
         <button class="btn primary wide" id="customSubmit" type="submit">Send for a quote</button>
         <p class="fine">No payment now. We will email a quote before printing.</p>
       </form>
-      <div id="customDone" class="custom-form" hidden>
+      <div id="customFormDone" class="custom-form" hidden>
         <h3>File received</h3>
         <p class="lead">Thanks. We will review your design and email you a quote shortly. If you do not hear back within two days, email engineeringprinting082@gmail.com.</p>
-        <button class="btn ghost" id="customAgain" type="button">Send another file</button>
+        <button class="btn ghost" type="button">Send another file</button>
+      </div>
+    </section>
+
+    <!-- Custom car parts: request form with make, model and a detailed description -->
+    <section id="car" class="section car">
+      <div class="car-head">
+        <p class="eyebrow">03 / CUSTOM CAR PARTS</p>
+        <h2>Parts made for <em>your</em> car.</h2>
+        <p class="lead">Shift knobs, vent louvres, trim inserts, clips, mounts and aero pieces, designed to fit your exact make and model. Tell us what you want and we will design it, quote it and print it.</p>
+      </div>
+      <div class="car-gallery">
+        <figure><img src="car-shiftknob.jpg" alt="Concept render of a custom shift knob with a knurled grip" width="800" height="800" loading="lazy"><figcaption>Shift knobs</figcaption></figure>
+        <figure><img src="car-louvre.jpg" alt="Concept render of a louvred vent panel" width="800" height="800" loading="lazy"><figcaption>Vents and louvres</figcaption></figure>
+        <figure><img src="car-insert.jpg" alt="Concept render of a personalised textured trim insert with a number" width="800" height="800" loading="lazy"><figcaption>Personalised trim</figcaption></figure>
+        <figure><img src="car-splitter.jpg" alt="Concept render of a splitter section with canard fins" width="800" height="800" loading="lazy"><figcaption>Aero pieces</figcaption></figure>
+      </div>
+      <p class="fine">Concept renders showing the kinds of parts we make.</p>
+      <div class="car-body">
+        <div class="car-copy">
+          <h3>How to request a part</h3>
+          <ol class="car-steps">
+            <li><strong>Tell us the car.</strong> Make, model and year, plus trim if it matters for fit.</li>
+            <li><strong>Describe the part in detail.</strong> Where it goes, what it replaces or adds, rough size, finish and any measurements you have.</li>
+            <li><strong>Add a photo or file if you have one.</strong> A photo of the spot it fits, a sketch, or a CAD file all help.</li>
+            <li><strong>Get a quote.</strong> We reply by email with a design plan and price before anything is printed.</li>
+          </ol>
+          <p class="note"><b>Good to know:</b> parts are printed in heat-resistant PETG or ASA for car use. They are for cosmetic and comfort parts, not for structural, safety or engine-bay parts. Large pieces are printed in sections and joined.</p>
+        </div>
+        <form id="carForm" class="custom-form" action="https://formsubmit.co/engineeringprinting082@gmail.com" method="POST" enctype="multipart/form-data">
+          <input type="hidden" name="_subject" value="Car part request">
+          <input type="hidden" name="_next" value="">
+          <input type="hidden" name="_captcha" value="false">
+          <input type="hidden" name="_template" value="table">
+          <input type="hidden" name="studentDiscount" value="No">
+          <input class="trap" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <label>Full name <input name="name" required autocomplete="name"></label>
+          <label>Email <input name="email" type="email" required autocomplete="email"></label>
+          <div class="row3">
+            <label>Make <input name="make" required placeholder="Honda"></label>
+            <label>Model <input name="model" required placeholder="Civic"></label>
+            <label>Year <input name="year" required inputmode="numeric" pattern="(19|20)[0-9]{2}" maxlength="4" placeholder="2019"></label>
+          </div>
+          <label>Type of part
+            <select name="partType" required>
+              <option value="" disabled selected>Choose one</option>
+              <option>Shift knob</option><option>Vent, louvre or grille</option><option>Trim insert or badge plate</option>
+              <option>Clip, mount or bracket</option><option>Phone or cup holder</option><option>Aero piece (lip, splitter, canard)</option><option>Something else</option>
+            </select>
+          </label>
+          <label>Describe the part in detail
+            <textarea name="description" rows="5" required minlength="20" placeholder="Where it goes, what it replaces, rough size, colour and finish, and any measurements you have."></textarea>
+          </label>
+          <label>Photo, sketch or CAD file (optional)
+            <input name="attachment" type="file" accept="image/*,.heic,.stl,.3mf,.obj,.step,.stp,.iges,.igs,.sldprt,.sldasm,.slddrw,.catpart,.catproduct,.catdrawing,.pdf,.dwg,.dxf,.zip">
+          </label>
+          <div class="row">
+            <label>Material
+              <select name="material"><option>Recommend for me</option><option>PETG</option><option>ASA (best for outside)</option></select>
+            </label>
+            <label>Quantity <input name="quantity" type="number" min="1" max="50" value="1" required></label>
+          </div>
+          <label>School email for student discount (optional) <input name="schoolEmail" type="email" placeholder="you@yourschool.ca"></label>
+          <label>Delivery
+            <select name="delivery"><option>Ship in Canada ($12 flat)</option><option>GTA pickup (free)</option></select>
+          </label>
+          <p class="error" role="alert"></p>
+          <button class="btn primary wide" type="submit">Request a quote</button>
+          <p class="fine">No payment now. Files up to 10 MB.</p>
+        </form>
+        <div id="carFormDone" class="custom-form" hidden>
+          <h3>Request received</h3>
+          <p class="lead">Thanks. We will look at your car and part details and email you a quote. If you do not hear back within two days, email engineeringprinting082@gmail.com.</p>
+          <button class="btn ghost" type="button">Request another part</button>
+        </div>
       </div>
     </section>
 
     <section id="how" class="section band">
-      <p class="eyebrow">03 / PROCESS</p>
+      <p class="eyebrow">04 / PROCESS</p>
       <h2>From order to desk</h2>
       <ol class="steps">
         <li><strong>Choose</strong><span>Pick your items, colours and quantities.</span></li>
@@ -130,12 +205,13 @@
     </section>
 
     <section id="faq" class="section faq">
-      <p class="eyebrow">04 / QUESTIONS</p>
+      <p class="eyebrow">05 / QUESTIONS</p>
       <h2>Good to know</h2>
       <details><summary>How does the student discount work?</summary><p>Enter your school email at checkout. If it is a recognized school address, 10% comes off your items. We confirm eligibility before accepting the order.</p></details>
       <details><summary>What does shipping cost?</summary><p>Shipping is a flat $12 CAD anywhere in Canada. Pickup in the Greater Toronto Area is free.</p></details>
       <details><summary>How long will my order take?</summary><p>Most orders are printed within 3 to 7 days of payment. Shipping time is extra.</p></details>
       <details><summary>How are custom prints priced?</summary><p>It depends on size, print time and material. Upload your file and we email a quote before anything is printed. Student discount applies.</p></details>
+      <details><summary>What car parts can you make?</summary><p>Cosmetic and comfort parts such as shift knobs, vent louvres, trim inserts, clips, mounts and aero pieces. We do not make structural, safety or engine-bay parts. Send your make, model, year and a detailed description for a quote.</p></details>
       <details><summary>What are the items made of?</summary><p>PLA plastic. Display pieces and light-duty tools only, so keep them away from heat and direct sun.</p></details>
     </section>
   </main>
@@ -183,8 +259,8 @@
     <div id="orderDone" hidden></div>
   </dialog>
 
-  <script src="products.js?v=6"></script>
-  <script src="art.js?v=6"></script>
-  <script src="app.js?v=6"></script>
+  <script src="products.js?v=7"></script>
+  <script src="art.js?v=7"></script>
+  <script src="app.js?v=7"></script>
 </body>
 </html>

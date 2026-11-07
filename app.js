@@ -395,46 +395,65 @@ renderCart();
 // Fills the animated hero drawing from art.js.
 $("heroFan").innerHTML = HERO_FAN;
 
-// ---------- Custom print uploads ----------
-// The upload form posts straight to FormSubmit as multipart data, because the
-// order service used by the cart only accepts files on a paid plan.
+// ---------- Upload forms: custom prints and car parts ----------
+// These post straight to FormSubmit as multipart data, because the order
+// service used by the cart only accepts files on a paid plan.
 const UPLOAD_LIMIT = 10 * 1024 * 1024; // FormSubmit caps all files at 10 MB per submission
-const UPLOAD_TYPES = /\.(stl|3mf|obj|step|stp|iges|igs|sldprt|sldasm|slddrw|catpart|catproduct|catdrawing|pdf|dwg|dxf|zip)$/i;
-const customForm = $("customForm");
-if (customForm) {
+const CAD_TYPES = /\.(stl|3mf|obj|step|stp|iges|igs|sldprt|sldasm|slddrw|catpart|catproduct|catdrawing|pdf|dwg|dxf|zip)$/i;
+const PHOTO_TYPES = /\.(jpe?g|png|heic|webp)$/i;
+
+// Wires up one upload form. key names the success flag, fileRequired says
+// whether a file must be attached, and subject builds the inbox subject line.
+function setupUploadForm({ form, key, fileRequired, allowPhotos, subject }) {
+  if (!form) return;
+  const el = (name) => form.elements[name];
+  const err = form.querySelector(".error");
+  const button = form.querySelector("button[type=submit]");
+  const label = button.textContent;
+  const done = $(`${form.id}Done`);
   // Send customers back to this page with a success flag after the upload.
-  customForm.elements._next.value = `${location.origin}${location.pathname}?sent=custom#custom`;
-  customForm.addEventListener("submit", (e) => {
-    const err = $("customError");
-    const file = customForm.elements.attachment.files[0];
+  el("_next").value = `${location.origin}${location.pathname}?sent=${key}#${form.closest("section").id}`;
+
+  form.addEventListener("submit", (e) => {
+    const file = el("attachment").files[0];
+    const stop = (msg) => { e.preventDefault(); err.textContent = msg; };
     err.textContent = "";
-    if (customForm.elements._honey.value) { e.preventDefault(); return; }
-    if (!file) { e.preventDefault(); err.textContent = "Attach your design file."; return; }
-    if (!UPLOAD_TYPES.test(file.name)) { e.preventDefault(); err.textContent = "Use an STL, 3MF, STEP, SolidWorks, CATIA, PDF drawing or ZIP file."; return; }
-    if (file.size > UPLOAD_LIMIT) { e.preventDefault(); err.textContent = `That file is ${(file.size / 1048576).toFixed(1)} MB. Zip it or email it to ${STORE.orderEmail} instead (10 MB maximum).`; return; }
+    if (el("_honey").value) { e.preventDefault(); return; }
+    if (fileRequired && !file) return stop("Attach your design file.");
+    if (file && !(CAD_TYPES.test(file.name) || (allowPhotos && PHOTO_TYPES.test(file.name)))) {
+      return stop(allowPhotos ? "Use a photo (JPG, PNG, HEIC) or a CAD file (STL, STEP, SolidWorks, CATIA, PDF or ZIP)." : "Use an STL, 3MF, STEP, SolidWorks, CATIA, PDF drawing or ZIP file.");
+    }
+    if (file && file.size > UPLOAD_LIMIT) return stop(`That file is ${(file.size / 1048576).toFixed(1)} MB. Zip it or email it to ${STORE.orderEmail} instead (10 MB maximum).`);
     // Flag requests that claim the student discount so it can be checked.
-    const school = customForm.elements.schoolEmail.value.trim();
-    customForm.elements.studentDiscount.value = !school ? "No" : isSchoolEmail(school) ? "Yes, verify school email" : "Requested, school not recognized";
-    // Readable subject so requests stand out in the inbox.
-    customForm.elements._subject.value = `Custom print request from ${customForm.elements.name.value.trim() || "a customer"}`;
-    $("customSubmit").disabled = true;
-    $("customSubmit").textContent = "Uploading...";
+    const school = el("schoolEmail").value.trim();
+    el("studentDiscount").value = !school ? "No" : isSchoolEmail(school) ? "Yes, verify school email" : "Requested, school not recognized";
+    el("_subject").value = subject(el);
+    button.disabled = true;
+    button.textContent = file ? "Uploading..." : "Sending...";
   });
+
   // Pages restored with the browser back button keep old state, so re-enable the button.
-  window.addEventListener("pageshow", () => {
-    $("customSubmit").disabled = false;
-    $("customSubmit").textContent = "Send for a quote";
-  });
+  window.addEventListener("pageshow", () => { button.disabled = false; button.textContent = label; });
+
   // Show the confirmation after FormSubmit redirects back here.
-  if (new URLSearchParams(location.search).get("sent") === "custom") {
-    customForm.hidden = true;
-    $("customDone").hidden = false;
+  if (new URLSearchParams(location.search).get("sent") === key) {
+    form.hidden = true;
+    done.hidden = false;
   }
-  // "Send another file" clears the success flag from the address and shows the form again.
-  $("customAgain").addEventListener("click", () => {
-    history.replaceState(null, "", `${location.pathname}#custom`);
-    customForm.reset();
-    customForm.hidden = false;
-    $("customDone").hidden = true;
+  // "Send another" clears the success flag from the address and shows the form again.
+  done.querySelector("button").addEventListener("click", () => {
+    history.replaceState(null, "", `${location.pathname}#${form.closest("section").id}`);
+    form.reset();
+    form.hidden = false;
+    done.hidden = true;
   });
 }
+
+setupUploadForm({
+  form: $("customForm"), key: "custom", fileRequired: true, allowPhotos: false,
+  subject: (el) => `Custom print request from ${el("name").value.trim() || "a customer"}`,
+});
+setupUploadForm({
+  form: $("carForm"), key: "car", fileRequired: false, allowPhotos: true,
+  subject: (el) => `Car part request: ${[el("year").value, el("make").value, el("model").value].map((v) => v.trim()).filter(Boolean).join(" ")} ${el("partType").value}`,
+});
