@@ -77,7 +77,12 @@ a { color: var(--cyan); }
 .card:hover, .card:focus-visible { transform: translateY(-5px); border-color: var(--cyan); box-shadow: 0 14px 40px rgba(95,212,255,.14); }
 .thumb { display: flex; align-items: center; justify-content: center; width: 100%; height: 220px; padding: 18px; color: var(--cyan);
   background-color: var(--panel-2); background-image: linear-gradient(rgba(95,212,255,.07) 1px, transparent 1px), linear-gradient(90deg, rgba(95,212,255,.07) 1px, transparent 1px); background-size: 20px 20px; }
+/* Product images sit edge to edge on their own cream studio background */
+.thumb:has(> img) { padding: 0; background: #ece8e1; }
+.thumb > img { object-fit: cover !important; }
 .thumb img, .art, .art svg { width: 100%; height: 100%; object-fit: contain; }
+.card:hover .thumb > img { transform: scale(1.04); }
+.thumb > img { transition: transform .3s; }
 .card:hover .art svg { filter: drop-shadow(0 0 7px rgba(95,212,255,.6)); }
 .art text { fill: currentColor; stroke: none; }
 .art .label, .art .dim text { font: 600 10px var(--mono); letter-spacing: .08em; }
