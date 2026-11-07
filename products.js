@@ -3,14 +3,16 @@
 // with a photo of a finished print when one is ready. art is the fallback drawing.
 
 // Shared colour choices, matched to common PLA filament.
-const MODEL_COLOURS = ["White", "Navy Blue", "Silver Grey", "Black"];
-const TOOL_COLOURS = ["Orange", "Black", "Silver Grey", "Navy Blue"];
+// Filament colours offered on every item.
+const COLOURS = ["Black", "White", "Grey", "Dark Grey", "Blue", "Red"];
+// Glow-in-the-dark filament is offered on smaller prints only (about 15 cm or less).
+const SMALL_COLOURS = [...COLOURS, "Glow-in-the-dark"];
 
 
 const PRODUCTS = [
   {
     id: "turbofan-cutaway", photo: "render-turbofan.jpg", name: "Sectioned Turbofan Display", category: "Display", price: 89, tag: "Flagship",
-    size: "About 30 cm long, multi-part build", colours: MODEL_COLOURS, art: "turbofan",
+    size: "About 30 cm long, multi-part build", colours: COLOURS, art: "turbofan",
     blurb: "A cutaway turbofan showing the fan, compressor and turbine stages on a matching stand.",
   },
   {
@@ -19,53 +21,53 @@ const PRODUCTS = [
       { label: "Concept jet (shown)", price: 16.5 }, { label: "F-35", price: 16.5 }, { label: "F-22", price: 16.5 },
       { label: "C-130", price: 16.5 }, { label: "P-51 Mustang", price: 16.5 },
     ],
-    size: "About 20 cm long, with stand", colours: MODEL_COLOURS, art: "jet",
+    size: "About 20 cm long, with stand", colours: COLOURS, art: "jet",
     blurb: "A scale desk model on a faceted stand. Choose the concept jet shown, or an F-35, F-22, C-130 or P-51 Mustang.",
   },
   {
     id: "engineering-stick", photo: "render-stick.jpg", name: "Engineering Stick Gift Box", category: "Gifts", price: 8, tag: "Gift pick",
-    size: "About 25 cm long", colours: ["White box", "Black box"], art: "stick",
+    size: "About 25 cm long", colours: COLOURS, art: "stick",
     blurb: "One highly advanced stick, presented in its own printed case. A joke every engineer will get.",
   },
   {
     id: "drill-square", photo: "render-square.jpg", name: "Layout Square and Drill Gauge", category: "Tools", price: 10,
-    size: "About 15 x 17 cm", colours: TOOL_COLOURS, art: "square",
+    size: "About 15 x 17 cm", colours: SMALL_COLOURS, art: "square",
     blurb: "A triangular layout square with ruler edges, angle marks and drill size holes from 3 to 15 mm.",
   },
   {
     id: "marking-gauge", photo: "render-gauge.jpg", name: "Centre-Finding Marking Gauge", category: "Tools", price: 10,
-    size: "About 15 cm long", colours: TOOL_COLOURS, art: "gauge",
+    size: "About 15 cm long", colours: SMALL_COLOURS, art: "gauge",
     blurb: "Hooks over a board edge to find centre and mark offsets of 15 to 30 mm, with hex sockets for pencils.",
   },
   {
     id: "locking-pliers", photo: "render-pliers.jpg", name: "Print-in-Place Locking Pliers", category: "Tools", price: 15,
-    size: "About 14 cm long", colours: TOOL_COLOURS, art: "pliers",
+    size: "About 14 cm long", colours: SMALL_COLOURS, art: "pliers",
     blurb: "Working locking pliers that come off the printer fully assembled. A great desk conversation piece.",
   },
   {
     id: "keyboard-tray", photo: "render-tray.jpg", name: "Flip-Down Keyboard Tray", category: "Desk", price: 25, tag: "Desk upgrade",
-    size: "Fits most full-size keyboards", colours: ["Orange and white", "Black and white"], art: "tray",
+    size: "Fits most full-size keyboards", colours: COLOURS, art: "tray",
     blurb: "A geared under-desk tray that folds your keyboard out of the way. Mounting screws required.",
   },
   {
     id: "keyboard-knob", photo: "render-knob.jpg", name: "Clip-On Knob for Logitech MX Keyboards", category: "Desk", price: 10, tag: "New",
-    size: "Clips onto the top edge of the keyboard", colours: ["Black and gold", "Black and orange"], art: "knob",
+    size: "Clips onto the top edge of the keyboard", colours: SMALL_COLOURS, art: "knob",
     blurb: "Spin to control your volume and more from a chunky knurled knob on your MX keyboard.",
   },
   {
     id: "braille-keycaps", photo: "render-keycap.jpg", name: "Braille Key Caps for Logitech MX Mechanical", category: "Desk", price: 3,
     options: [{ label: "Single key", price: 3 }, { label: "Full keyboard set", price: 20 }],
-    size: "For single keys, list which keys in your order notes", colours: ["Navy Blue", "Black", "White"], art: "keycap",
+    size: "For single keys, list which keys in your order notes", colours: SMALL_COLOURS, art: "keycap",
     blurb: "Key caps with raised Braille dots, so you can find your keys by touch. $3 each or $20 for a full set.",
   },
   {
     id: "lightswitch", photo: "render-lightswitch.jpg", name: "Over-Engineered Light Switch", category: "Gifts", price: 10, tag: "Conversation piece",
-    size: "Decorative lever for a standard wall switch", colours: ["Silver and copper", "Black and brass"], art: "lightswitch",
+    size: "Decorative lever for a standard wall switch", colours: SMALL_COLOURS, art: "lightswitch",
     blurb: "Why flick a switch when you can pull a lever through a geared rack? No wiring involved.",
   },
   {
     id: "custom-print", photo: "render-custom.jpg", name: "Custom Print From Your File", category: "Custom", price: 0, quote: true, tag: "Upload",
-    size: "Send STL, 3MF, STEP, SolidWorks or CATIA files", colours: MODEL_COLOURS, art: "gauge",
+    size: "Send STL, 3MF, STEP, SolidWorks or CATIA files", colours: COLOURS, art: "gauge",
     blurb: "Upload your own model or drawing and we will quote and print it for you.",
   },
 ];

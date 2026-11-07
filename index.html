@@ -22,7 +22,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
   <!-- The version number forces browsers to load new files after each update -->
-  <link rel="stylesheet" href="styles.css?v=9">
+  <link rel="stylesheet" href="styles.css?v=10">
 </head>
 <body>
   <header class="topbar">
@@ -96,7 +96,7 @@
         </label>
         <div class="row">
           <label>Colour
-            <select name="colour"><option>White</option><option>Black</option><option>Navy Blue</option><option>Silver Grey</option><option>Orange</option><option>Not sure, recommend one</option></select>
+            <select name="colour"><option>Black</option><option>White</option><option>Grey</option><option>Dark Grey</option><option>Blue</option><option>Red</option><option>Glow-in-the-dark (small parts only)</option><option>Not sure, recommend one</option></select>
           </label>
           <label>Quantity <input name="quantity" type="number" min="1" max="50" value="1" required></label>
         </div>
@@ -171,7 +171,10 @@
           <label>Photo, sketch or CAD file (optional)
             <input name="attachment" type="file" accept="image/*,.heic,.stl,.3mf,.obj,.step,.stp,.iges,.igs,.sldprt,.sldasm,.slddrw,.catpart,.catproduct,.catdrawing,.pdf,.dwg,.dxf,.zip">
           </label>
-          <div class="row">
+          <div class="row3">
+            <label>Colour
+              <select name="colour"><option>Black</option><option>White</option><option>Grey</option><option>Dark Grey</option><option>Blue</option><option>Red</option><option>Not sure, recommend one</option></select>
+            </label>
             <label>Material
               <select name="material"><option>Recommend for me</option><option>PETG</option><option>ASA (best for outside)</option></select>
             </label>
@@ -212,6 +215,7 @@
       <details><summary>How long will my order take?</summary><p>Most orders are printed within 3 to 7 days of payment. Shipping time is extra.</p></details>
       <details><summary>How are custom prints priced?</summary><p>It depends on size, print time and material. Upload your file and we email a quote before anything is printed. Student discount applies.</p></details>
       <details><summary>What car parts can you make?</summary><p>Body kit pieces such as front lips, diffusers, ducktail spoilers and side skirts, plus shift knobs, vent louvres, trim inserts, clips and mounts. We do not make structural, safety or engine-bay parts. Send your make, model, year and a detailed description for a quote.</p></details>
+      <details><summary>What colours can I choose?</summary><p>Black, white, grey, dark grey, blue and red on every item. Glow-in-the-dark is available on smaller prints, about 15 cm or less, such as the tools, key caps, knob and light switch.</p></details>
       <details><summary>What are the items made of?</summary><p>PLA plastic. Display pieces and light-duty tools only, so keep them away from heat and direct sun.</p></details>
     </section>
   </main>
@@ -259,8 +263,8 @@
     <div id="orderDone" hidden></div>
   </dialog>
 
-  <script src="products.js?v=9"></script>
-  <script src="art.js?v=9"></script>
-  <script src="app.js?v=9"></script>
+  <script src="products.js?v=10"></script>
+  <script src="art.js?v=10"></script>
+  <script src="app.js?v=10"></script>
 </body>
 </html>
