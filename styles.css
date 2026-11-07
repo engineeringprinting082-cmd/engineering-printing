@@ -156,3 +156,13 @@ legend { padding: 0 4px; font-size: .92rem; font-weight: 600; }
   .spin, .spin-fast, .ticker div { animation: none; }
   html { scroll-behavior: auto; }
 }
+
+/* Custom print section: copy on the left, upload form on the right */
+.custom { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+.custom-form { padding: 24px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel); }
+.custom-form .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.custom input[type=file] { padding: 14px; border-style: dashed; cursor: pointer; }
+.ticks { margin: 18px 0; padding: 0; list-style: none; }
+.ticks li { padding: 6px 0 6px 26px; position: relative; color: var(--text); }
+.ticks li::before { content: ""; position: absolute; left: 0; top: 11px; width: 12px; height: 7px; border-left: 2px solid var(--cyan); border-bottom: 2px solid var(--cyan); transform: rotate(-45deg); }
+@media (max-width: 800px) { .custom { grid-template-columns: 1fr; } }

@@ -13,12 +13,20 @@ let activeFilter = "All";
 const $ = (id) => document.getElementById(id);
 const money = (n) => `$${n.toFixed(2)}`;
 const productById = (id) => PRODUCTS.find((p) => p.id === id);
+// Unit price for a cart line: the chosen option's price, or the product price.
+const unitPrice = (line) => {
+  const p = productById(line.id);
+  const opt = (p.options || []).find((o) => o.label === line.option);
+  return opt ? opt.price : p.price;
+};
+// Card and dialog price label, for example "From $3.00 CAD" or "Quoted per file".
+const priceLabel = (p) => p.quote ? "Quoted per file" : p.options ? `From ${money(Math.min(...p.options.map((o) => o.price)))} CAD` : `${money(p.price)} CAD`;
 
 function loadCart() {
   try {
     const saved = JSON.parse(localStorage.getItem(CART_KEY));
     // Drop saved lines for products that no longer exist.
-    return Array.isArray(saved) ? saved.filter((l) => PRODUCTS.some((p) => p.id === l.id)) : [];
+    return Array.isArray(saved) ? saved.filter((l) => PRODUCTS.some((p) => p.id === l.id && !p.quote)) : [];
   } catch {
     return [];
   }
@@ -83,7 +91,7 @@ function renderGrid() {
     blurb.textContent = p.blurb;
     const price = document.createElement("p");
     price.className = "price";
-    price.textContent = `${money(p.price)} CAD`;
+    price.textContent = priceLabel(p);
     body.append(title, blurb, price);
     card.append(thumb, body);
     if (p.tag) {
@@ -93,7 +101,7 @@ function renderGrid() {
       tag.textContent = p.tag;
       card.append(tag);
     }
-    card.onclick = () => openProduct(p);
+    card.onclick = () => (p.quote ? $("custom").scrollIntoView({ behavior: "smooth" }) : openProduct(p));
     return card;
   }));
 }
@@ -120,9 +128,21 @@ function openProduct(p) {
   right.querySelector("h2").textContent = p.name;
   right.querySelector(".desc").textContent = p.blurb;
   right.querySelector(".size").textContent = `${p.size}. Printed in PLA.`;
-  right.querySelector(".price").textContent = `${money(p.price)} CAD`;
+  right.querySelector(".price").textContent = priceLabel(p);
   const select = right.elements.colour;
   p.colours.forEach((c) => select.add(new Option(c, c)));
+
+  // Optional pricing choice, such as a single key cap or a full keyboard set.
+  let optionSelect = null;
+  if (p.options) {
+    const label = document.createElement("label");
+    label.textContent = "Option ";
+    optionSelect = document.createElement("select");
+    optionSelect.name = "option";
+    p.options.forEach((o) => optionSelect.add(new Option(`${o.label} (${money(o.price)})`, o.label)));
+    label.append(optionSelect);
+    select.closest("label").before(label);
+  }
 
   let textInput = null;
   if (p.custom) {
@@ -149,7 +169,7 @@ function openProduct(p) {
       return;
     }
     if (textInput && !text) { err.textContent = "Enter the text you want printed."; return; }
-    addToCart(p.id, select.value, qty, text);
+    addToCart(p.id, select.value, qty, text, optionSelect ? optionSelect.value : "");
     $("productDialog").close();
     openCart();
   };
@@ -160,10 +180,10 @@ function openProduct(p) {
 }
 
 // Merges matching lines so one colour and text combination stays on one row.
-function addToCart(id, colour, qty, text) {
-  const line = cart.find((l) => l.id === id && l.colour === colour && (l.text || "") === text);
+function addToCart(id, colour, qty, text, option = "") {
+  const line = cart.find((l) => l.id === id && l.colour === colour && (l.text || "") === text && (l.option || "") === option);
   if (line) line.qty = Math.min(line.qty + qty, STORE.maxQuantity);
-  else cart.push({ id, colour, qty, text });
+  else cart.push({ id, colour, qty, text, option });
   saveCart();
   renderCart();
 }
@@ -179,7 +199,7 @@ function isSchoolEmail(value) {
 // All money is worked out here so the screen and the email always agree.
 function totals() {
   const form = $("checkoutForm");
-  const subtotal = cart.reduce((sum, l) => sum + productById(l.id).price * l.qty, 0);
+  const subtotal = cart.reduce((sum, l) => sum + unitPrice(l) * l.qty, 0);
   const student = isSchoolEmail(form.elements.schoolEmail.value);
   const discount = student ? Math.round(subtotal * STORE.studentRate * 100) / 100 : 0;
   const shipping = cart.length && form.elements.delivery.value === "ship" ? STORE.shippingFlat : 0;
@@ -220,7 +240,7 @@ function renderCart() {
     const info = document.createElement("div");
     info.textContent = p.name;
     const meta = document.createElement("small");
-    meta.textContent = [l.colour, l.text && `"${l.text}"`, `${money(p.price)} each`].filter(Boolean).join(" | ");
+    meta.textContent = [l.option, l.colour, l.text && `"${l.text}"`, `${money(unitPrice(l))} each`].filter(Boolean).join(" | ");
     info.append(meta);
     const qty = document.createElement("input");
     qty.type = "number";
@@ -261,7 +281,8 @@ function orderText(order, t) {
   const lines = cart.map((l, i) => {
     const p = productById(l.id);
     const text = l.text ? `, text: "${l.text}"` : "";
-    return `${i + 1}. ${p.name} | Colour: ${l.colour} | Quantity: ${l.qty}${text} | ${money(p.price * l.qty)}`;
+    const opt = l.option ? ` | Option: ${l.option}` : "";
+    return `${i + 1}. ${p.name}${opt} | Colour: ${l.colour} | Quantity: ${l.qty}${text} | ${money(unitPrice(l) * l.qty)}`;
   });
   return [
     `Order ${order}`, "", ...lines, "",
@@ -352,3 +373,32 @@ renderCart();
 
 // Fills the animated hero drawing from art.js.
 $("heroFan").innerHTML = HERO_FAN;
+
+// ---------- Custom print uploads ----------
+// The upload form posts straight to FormSubmit as multipart data, because the
+// order service used by the cart only accepts files on a paid plan.
+const UPLOAD_LIMIT = 10 * 1024 * 1024; // FormSubmit caps all files at 10 MB per submission
+const UPLOAD_TYPES = /\.(stl|3mf|obj|step|stp|iges|igs|sldprt|sldasm|slddrw|catpart|catproduct|catdrawing|pdf|dwg|dxf|zip)$/i;
+const customForm = $("customForm");
+if (customForm) {
+  // Send customers back to this page with a success flag after the upload.
+  customForm.elements._next.value = `${location.origin}${location.pathname}?sent=custom#custom`;
+  customForm.addEventListener("submit", (e) => {
+    const err = $("customError");
+    const file = customForm.elements.attachment.files[0];
+    err.textContent = "";
+    if (customForm.elements._honey.value) { e.preventDefault(); return; }
+    if (!file) { e.preventDefault(); err.textContent = "Attach your design file."; return; }
+    if (!UPLOAD_TYPES.test(file.name)) { e.preventDefault(); err.textContent = "Use an STL, 3MF, STEP, SolidWorks, CATIA, PDF drawing or ZIP file."; return; }
+    if (file.size > UPLOAD_LIMIT) { e.preventDefault(); err.textContent = `That file is ${(file.size / 1048576).toFixed(1)} MB. Zip it or email it to ${STORE.orderEmail} instead (10 MB maximum).`; return; }
+    // Readable subject so requests stand out in the inbox.
+    customForm.elements._subject.value = `Custom print request from ${customForm.elements.name.value.trim() || "a customer"}`;
+    $("customSubmit").disabled = true;
+    $("customSubmit").textContent = "Uploading...";
+  });
+  // Show the confirmation after FormSubmit redirects back here.
+  if (new URLSearchParams(location.search).get("sent") === "custom") {
+    customForm.hidden = true;
+    $("customDone").hidden = false;
+  }
+}

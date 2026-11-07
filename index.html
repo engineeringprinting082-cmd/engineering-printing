@@ -9,13 +9,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
   <!-- The version number forces browsers to load new files after each update -->
-  <link rel="stylesheet" href="styles.css?v=4">
+  <link rel="stylesheet" href="styles.css?v=5">
 </head>
 <body>
   <header class="topbar">
     <a class="brand" href="#top" aria-label="Engineering Printing home"><span class="mark">EP</span> Engineering Printing</a>
     <nav>
       <a href="#shop">Shop</a>
+      <a href="#custom">Custom</a>
       <a href="#how">Process</a>
       <a href="#faq">FAQ</a>
     </nav>
@@ -33,7 +34,7 @@
           <span class="chip">Students save 10%</span>
         </div>
         <ul class="specs">
-          <li><b>11</b> designs</li>
+          <li><b>10</b> designs + custom prints</li>
           <li><b>$12</b> flat Canada shipping</li>
           <li><b>Free</b> GTA pickup</li>
         </ul>
@@ -54,8 +55,53 @@
       <p class="fine">Images are studio renders of each design. Printed items have visible layer lines and vary slightly in finish.</p>
     </section>
 
+    <!-- Custom print requests: posts the customer's file straight to the order inbox -->
+    <section id="custom" class="section custom">
+      <div class="custom-copy">
+        <p class="eyebrow">02 / CUSTOM PRINTS</p>
+        <h2>Got a design? We'll print it.</h2>
+        <p class="lead">Upload a SolidWorks part or drawing, a CATIA model, or an STL. We review it, email you a quote, and print it once you approve.</p>
+        <ul class="ticks">
+          <li>STL, 3MF, OBJ, STEP, IGES</li>
+          <li>SolidWorks .sldprt, .sldasm, .slddrw</li>
+          <li>CATIA .CATPart, .CATProduct, .CATDrawing</li>
+          <li>PDF or DXF drawings, or a ZIP of several files</li>
+        </ul>
+        <p class="fine">10 MB maximum per request. For larger files, email them to engineeringprinting082@gmail.com.</p>
+      </div>
+      <form id="customForm" class="custom-form" action="https://formsubmit.co/engineeringprinting082@gmail.com" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="_subject" value="Custom print request">
+        <input type="hidden" name="_next" value="">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_template" value="table">
+        <input class="trap" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <label>Full name <input name="name" required autocomplete="name"></label>
+        <label>Email <input name="email" type="email" required autocomplete="email"></label>
+        <label>Design file
+          <input name="attachment" type="file" required accept=".stl,.3mf,.obj,.step,.stp,.iges,.igs,.sldprt,.sldasm,.slddrw,.catpart,.catproduct,.catdrawing,.pdf,.dwg,.dxf,.zip">
+        </label>
+        <div class="row">
+          <label>Colour
+            <select name="colour"><option>White</option><option>Black</option><option>Navy Blue</option><option>Silver Grey</option><option>Orange</option><option>Not sure, recommend one</option></select>
+          </label>
+          <label>Quantity <input name="quantity" type="number" min="1" max="50" value="1" required></label>
+        </div>
+        <label>Delivery
+          <select name="delivery"><option>Ship in Canada ($12 flat)</option><option>GTA pickup (free)</option></select>
+        </label>
+        <label>Notes: size, strength, deadline (optional) <textarea name="notes" rows="3"></textarea></label>
+        <p class="error" id="customError" role="alert"></p>
+        <button class="btn primary wide" id="customSubmit" type="submit">Send for a quote</button>
+        <p class="fine">No payment now. We will email a quote before printing.</p>
+      </form>
+      <div id="customDone" class="custom-form" hidden>
+        <h3>File received</h3>
+        <p class="lead">Thanks. We will review your design and email you a quote shortly.</p>
+      </div>
+    </section>
+
     <section id="how" class="section band">
-      <p class="eyebrow">02 / PROCESS</p>
+      <p class="eyebrow">03 / PROCESS</p>
       <h2>From order to desk</h2>
       <ol class="steps">
         <li><strong>Choose</strong><span>Pick your items, colours and quantities.</span></li>
@@ -66,11 +112,12 @@
     </section>
 
     <section id="faq" class="section faq">
-      <p class="eyebrow">03 / QUESTIONS</p>
+      <p class="eyebrow">04 / QUESTIONS</p>
       <h2>Good to know</h2>
       <details><summary>How does the student discount work?</summary><p>Enter your school email at checkout. If it is a recognized school address, 10% comes off your items. We confirm eligibility before accepting the order.</p></details>
       <details><summary>What does shipping cost?</summary><p>Shipping is a flat $12 CAD anywhere in Canada. Pickup in the Greater Toronto Area is free.</p></details>
       <details><summary>How long will my order take?</summary><p>Most orders are printed within 3 to 7 days of payment. Shipping time is extra.</p></details>
+      <details><summary>How are custom prints priced?</summary><p>It depends on size, print time and material. Upload your file and we email a quote before anything is printed. Student discount applies.</p></details>
       <details><summary>What are the items made of?</summary><p>PLA plastic. Display pieces and light-duty tools only, so keep them away from heat and direct sun.</p></details>
     </section>
   </main>
@@ -115,8 +162,8 @@
     <div id="orderDone" hidden></div>
   </dialog>
 
-  <script src="products.js?v=4"></script>
-  <script src="art.js?v=4"></script>
-  <script src="app.js?v=4"></script>
+  <script src="products.js?v=5"></script>
+  <script src="art.js?v=5"></script>
+  <script src="app.js?v=5"></script>
 </body>
 </html>
