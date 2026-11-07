@@ -22,7 +22,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
   <!-- The version number forces browsers to load new files after each update -->
-  <link rel="stylesheet" href="styles.css?v=7">
+  <link rel="stylesheet" href="styles.css?v=8">
 </head>
 <body>
   <header class="topbar">
@@ -30,7 +30,7 @@
     <nav>
       <a href="#shop">Shop</a>
       <a href="#custom">Custom</a>
-      <a href="#car">Car parts</a>
+      <a href="#car">Body kits</a>
       <a href="#how">Process</a>
       <a href="#faq">FAQ</a>
     </nav>
@@ -122,17 +122,17 @@
     <!-- Custom car parts: request form with make, model and a detailed description -->
     <section id="car" class="section car">
       <div class="car-head">
-        <p class="eyebrow">03 / CUSTOM CAR PARTS</p>
-        <h2>Parts made for <em>your</em> car.</h2>
-        <p class="lead">Shift knobs, vent louvres, trim inserts, clips, mounts and aero pieces, designed to fit your exact make and model. Tell us what you want and we will design it, quote it and print it.</p>
+        <p class="eyebrow">03 / BODY KITS AND CAR PARTS</p>
+        <h2>Body kits made for <em>your</em> car.</h2>
+        <p class="lead">Front lips, rear diffusers, ducktail spoilers and side skirts, designed to fit your exact make and model, from a BMW M4 to a daily driver. We also make shift knobs, vent louvres, trim inserts, clips and mounts. Tell us what you want and we will design it, quote it and print it.</p>
       </div>
       <div class="car-gallery">
-        <figure><img src="car-shiftknob.jpg" alt="Concept render of a custom shift knob with a knurled grip" width="800" height="800" loading="lazy"><figcaption>Shift knobs</figcaption></figure>
-        <figure><img src="car-louvre.jpg" alt="Concept render of a louvred vent panel" width="800" height="800" loading="lazy"><figcaption>Vents and louvres</figcaption></figure>
-        <figure><img src="car-insert.jpg" alt="Concept render of a personalised textured trim insert with a number" width="800" height="800" loading="lazy"><figcaption>Personalised trim</figcaption></figure>
-        <figure><img src="car-splitter.jpg" alt="Concept render of a splitter section with canard fins" width="800" height="800" loading="lazy"><figcaption>Aero pieces</figcaption></figure>
+        <figure><img src="kit-lip.jpg" alt="Concept render of a carbon-look front lip splitter fitted to a grey test bumper" width="1280" height="720" loading="lazy"><figcaption>Front lip splitters</figcaption></figure>
+        <figure><img src="kit-diffuser.jpg" alt="Concept render of a carbon-look rear diffuser with strakes and quad exhaust cut-outs" width="1280" height="720" loading="lazy"><figcaption>Rear diffusers</figcaption></figure>
+        <figure><img src="kit-ducktail.jpg" alt="Concept render of a carbon-look ducktail spoiler on a grey trunk lid" width="1280" height="720" loading="lazy"><figcaption>Ducktail spoilers</figcaption></figure>
+        <figure><img src="kit-skirt.jpg" alt="Concept render of a carbon-look side skirt extension with a rear winglet" width="1280" height="720" loading="lazy"><figcaption>Side skirts</figcaption></figure>
       </div>
-      <p class="fine">Concept renders showing the kinds of parts we make.</p>
+      <p class="fine">Concept renders of kit pieces on a grey fitting buck. Carbon-look finish shown; parts are printed in PETG or ASA.</p>
       <div class="car-body">
         <div class="car-copy">
           <h3>How to request a part</h3>
@@ -154,19 +154,19 @@
           <label>Full name <input name="name" required autocomplete="name"></label>
           <label>Email <input name="email" type="email" required autocomplete="email"></label>
           <div class="row3">
-            <label>Make <input name="make" required placeholder="Honda"></label>
-            <label>Model <input name="model" required placeholder="Civic"></label>
-            <label>Year <input name="year" required inputmode="numeric" pattern="(19|20)[0-9]{2}" maxlength="4" placeholder="2019"></label>
+            <label>Make <input name="make" required placeholder="BMW"></label>
+            <label>Model <input name="model" required placeholder="M4"></label>
+            <label>Year <input name="year" required inputmode="numeric" pattern="(19|20)[0-9]{2}" maxlength="4" placeholder="2022"></label>
           </div>
           <label>Type of part
             <select name="partType" required>
               <option value="" disabled selected>Choose one</option>
-              <option>Shift knob</option><option>Vent, louvre or grille</option><option>Trim insert or badge plate</option>
-              <option>Clip, mount or bracket</option><option>Phone or cup holder</option><option>Aero piece (lip, splitter, canard)</option><option>Something else</option>
+              <option>Body kit piece (lip, diffuser, spoiler, skirts)</option><option>Full body kit</option><option>Shift knob</option><option>Vent, louvre or grille</option><option>Trim insert or badge plate</option>
+              <option>Clip, mount or bracket</option><option>Phone or cup holder</option><option>Other aero piece (canards, vents)</option><option>Something else</option>
             </select>
           </label>
           <label>Describe the part in detail
-            <textarea name="description" rows="5" required minlength="20" placeholder="Where it goes, what it replaces, rough size, colour and finish, and any measurements you have."></textarea>
+            <textarea name="description" rows="5" required minlength="20" placeholder="Which pieces you want, where they mount, the look you are after (aggressive, subtle, OEM+), finish, and any measurements or existing parts it should match."></textarea>
           </label>
           <label>Photo, sketch or CAD file (optional)
             <input name="attachment" type="file" accept="image/*,.heic,.stl,.3mf,.obj,.step,.stp,.iges,.igs,.sldprt,.sldasm,.slddrw,.catpart,.catproduct,.catdrawing,.pdf,.dwg,.dxf,.zip">
@@ -211,14 +211,14 @@
       <details><summary>What does shipping cost?</summary><p>Shipping is a flat $12 CAD anywhere in Canada. Pickup in the Greater Toronto Area is free.</p></details>
       <details><summary>How long will my order take?</summary><p>Most orders are printed within 3 to 7 days of payment. Shipping time is extra.</p></details>
       <details><summary>How are custom prints priced?</summary><p>It depends on size, print time and material. Upload your file and we email a quote before anything is printed. Student discount applies.</p></details>
-      <details><summary>What car parts can you make?</summary><p>Cosmetic and comfort parts such as shift knobs, vent louvres, trim inserts, clips, mounts and aero pieces. We do not make structural, safety or engine-bay parts. Send your make, model, year and a detailed description for a quote.</p></details>
+      <details><summary>What car parts can you make?</summary><p>Body kit pieces such as front lips, diffusers, ducktail spoilers and side skirts, plus shift knobs, vent louvres, trim inserts, clips and mounts. We do not make structural, safety or engine-bay parts. Send your make, model, year and a detailed description for a quote.</p></details>
       <details><summary>What are the items made of?</summary><p>PLA plastic. Display pieces and light-duty tools only, so keep them away from heat and direct sun.</p></details>
     </section>
   </main>
 
   <footer class="footer">
     <p>Engineering Printing, Greater Toronto Area. Prices in CAD.</p>
-    <p>An independent maker. Not affiliated with or endorsed by any aerospace manufacturer or by Logitech. Logitech and MX are trademarks of their owner and are used only to describe compatibility.</p>
+    <p>An independent maker. Not affiliated with or endorsed by any aerospace manufacturer, BMW or Logitech. BMW, M4, Logitech and MX are trademarks of their owners and are used only to describe fit and compatibility.</p>
     <p><a href="mailto:engineeringprinting082@gmail.com">engineeringprinting082@gmail.com</a></p>
   </footer>
 
@@ -259,8 +259,8 @@
     <div id="orderDone" hidden></div>
   </dialog>
 
-  <script src="products.js?v=7"></script>
-  <script src="art.js?v=7"></script>
-  <script src="app.js?v=7"></script>
+  <script src="products.js?v=8"></script>
+  <script src="art.js?v=8"></script>
+  <script src="app.js?v=8"></script>
 </body>
 </html>
