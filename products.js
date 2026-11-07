@@ -14,9 +14,13 @@ const PRODUCTS = [
     blurb: "A cutaway turbofan showing the fan, compressor and turbine stages on a matching stand.",
   },
   {
-    id: "concept-jet", photo: "render-jet.jpg", name: "Desk Jet Model", category: "Display", price: 16.5,
+    id: "concept-jet", photo: "render-jet.jpg", name: "Desk Aircraft Model", category: "Display", price: 16.5,
+    options: [
+      { label: "Concept jet (shown)", price: 16.5 }, { label: "F-35", price: 16.5 }, { label: "F-22", price: 16.5 },
+      { label: "C-130", price: 16.5 }, { label: "P-51 Mustang", price: 16.5 },
+    ],
     size: "About 20 cm long, with stand", colours: MODEL_COLOURS, art: "jet",
-    blurb: "A sleek concept jet, angled on a faceted display stand.",
+    blurb: "A scale desk model on a faceted stand. Choose the concept jet shown, or an F-35, F-22, C-130 or P-51 Mustang.",
   },
   {
     id: "engineering-stick", photo: "render-stick.jpg", name: "Engineering Stick Gift Box", category: "Gifts", price: 8, tag: "Gift pick",

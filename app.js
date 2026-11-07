@@ -20,7 +20,7 @@ const unitPrice = (line) => {
   return opt ? opt.price : p.price;
 };
 // Card and dialog price label, for example "From $3.00 CAD" or "Quoted per file".
-const priceLabel = (p) => p.quote ? "Quoted per file" : p.options ? `From ${money(Math.min(...p.options.map((o) => o.price)))} CAD` : `${money(p.price)} CAD`;
+const priceLabel = (p) => p.quote ? "Quoted per file" : p.options && new Set(p.options.map((o) => o.price)).size > 1 ? `From ${money(Math.min(...p.options.map((o) => o.price)))} CAD` : `${money(p.price)} CAD`;
 
 function loadCart() {
   try {
@@ -147,10 +147,11 @@ function openProduct(p) {
   let optionSelect = null;
   if (p.options) {
     const label = document.createElement("label");
-    label.textContent = "Option ";
+    label.textContent = p.id === "concept-jet" ? "Aircraft " : "Option ";
     optionSelect = document.createElement("select");
     optionSelect.name = "option";
-    p.options.forEach((o) => optionSelect.add(new Option(`${o.label} (${money(o.price)})`, o.label)));
+    const samePrice = new Set(p.options.map((o) => o.price)).size === 1;
+    p.options.forEach((o) => optionSelect.add(new Option(samePrice ? o.label : `${o.label} (${money(o.price)})`, o.label)));
     label.append(optionSelect);
     select.closest("label").before(label);
   }
