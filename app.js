@@ -26,7 +26,17 @@ function loadCart() {
   try {
     const saved = JSON.parse(localStorage.getItem(CART_KEY));
     // Drop saved lines for products that no longer exist.
-    return Array.isArray(saved) ? saved.filter((l) => PRODUCTS.some((p) => p.id === l.id && !p.quote)) : [];
+    if (!Array.isArray(saved)) return [];
+    return saved
+      .filter((l) => l && PRODUCTS.some((p) => p.id === l.id && !p.quote))
+      .map((l) => ({
+        id: l.id,
+        colour: String(l.colour || ""),
+        option: String(l.option || ""),
+        text: "",
+        // Whole numbers from 1 to the maximum only.
+        qty: Math.min(Math.max(Math.round(Number(l.qty)) || 1, 1), STORE.maxQuantity),
+      }));
   } catch {
     return [];
   }
@@ -36,25 +46,18 @@ function saveCart() {
   try { localStorage.setItem(CART_KEY, JSON.stringify(cart)); } catch { /* Private windows can block storage */ }
 }
 
-// Builds a live plaque preview. textContent keeps customer text from becoming HTML.
-function plaqueNode(text, colour) {
-  const el = document.createElement("div");
-  el.className = /on blue/.test(colour || "") ? "plaque on-blue" : "plaque";
-  el.textContent = text || "YOUR TEXT";
-  return el;
-}
-
-// Returns the visual for a product: a real photo when one is listed, otherwise
-// the plaque preview or the original drawing.
-function visual(product, text, colour) {
+// Returns the visual for a product: its image when one is listed, otherwise the
+// original line drawing from art.js.
+function visual(product) {
   if (product.photo) {
     const img = new Image();
     img.src = product.photo;
     img.alt = product.name;
     img.loading = "lazy";
+    img.decoding = "async";
+    img.width = img.height = 1000; // Reserves space so the page does not jump while loading
     return img;
   }
-  if (product.art === "plaque") return plaqueNode(text, colour);
   const holder = document.createElement("div");
   holder.className = "art";
   holder.innerHTML = ART[product.art]; // Trusted: static strings from art.js
@@ -80,19 +83,27 @@ function renderGrid() {
     card.type = "button";
     card.className = "card";
     card.dataset.id = p.id;
-    const thumb = document.createElement("div");
+    const thumb = document.createElement("span");
     thumb.className = "thumb";
     thumb.append(visual(p));
-    const body = document.createElement("div");
+    const body = document.createElement("span");
     body.className = "card-body";
-    const title = document.createElement("h3");
+    const title = document.createElement("span");
+    title.className = "card-title";
     title.textContent = p.name;
-    const blurb = document.createElement("p");
+    const blurb = document.createElement("span");
+    blurb.className = "card-blurb";
     blurb.textContent = p.blurb;
-    const price = document.createElement("p");
+    const price = document.createElement("span");
     price.className = "price";
     price.textContent = priceLabel(p);
-    body.append(title, blurb, price);
+    const cta = document.createElement("span");
+    cta.className = "card-cta";
+    cta.textContent = p.quote ? "Upload a file" : "View options";
+    const foot = document.createElement("span");
+    foot.className = "card-foot";
+    foot.append(price, cta);
+    body.append(title, blurb, foot);
     card.append(thumb, body);
     if (p.tag) {
       // Small corner label for highlighted products.
@@ -120,7 +131,7 @@ function openProduct(p) {
   left.append(stage);
 
   const right = document.createElement("form");
-  right.innerHTML = `<h2></h2><p class="desc"></p><p class="fine size"></p><p class="price"></p>
+  right.innerHTML = `<h2 id="productTitle"></h2><p class="desc"></p><p class="fine size"></p><p class="price"></p>
     <label>Colour <select name="colour"></select></label>
     <label>Quantity <input name="qty" type="number" min="1" max="${STORE.maxQuantity}" value="1" required></label>
     <p class="error" role="alert"></p>
@@ -144,33 +155,17 @@ function openProduct(p) {
     select.closest("label").before(label);
   }
 
-  let textInput = null;
-  if (p.custom) {
-    const label = document.createElement("label");
-    label.textContent = `Your text (up to ${STORE.plaqueMaxChars} characters) `;
-    textInput = document.createElement("input");
-    textInput.name = "customText";
-    textInput.maxLength = STORE.plaqueMaxChars;
-    textInput.required = true;
-    label.append(textInput);
-    select.closest("label").before(label);
-    const refresh = () => stage.replaceChildren(plaqueNode(textInput.value, select.value));
-    textInput.oninput = refresh;
-    select.onchange = refresh;
-  }
-
   right.onsubmit = (e) => {
     e.preventDefault();
     const qty = Number(right.elements.qty.value);
-    const text = textInput ? textInput.value.trim() : "";
     const err = right.querySelector(".error");
     if (!Number.isInteger(qty) || qty < 1 || qty > STORE.maxQuantity) {
       err.textContent = `Enter a quantity from 1 to ${STORE.maxQuantity}.`;
       return;
     }
-    if (textInput && !text) { err.textContent = "Enter the text you want printed."; return; }
-    addToCart(p.id, select.value, qty, text, optionSelect ? optionSelect.value : "");
+    addToCart(p.id, select.value, qty, "", optionSelect ? optionSelect.value : "");
     $("productDialog").close();
+    toast(`${qty} x ${p.name} added to cart`);
     openCart();
   };
 
@@ -308,14 +303,20 @@ async function submitOrder(event) {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.email.value.trim())) { error.textContent = "Enter a valid email."; return; }
   if (ship && !f.address.value.trim()) { error.textContent = "Enter your shipping address."; return; }
 
+  const button = $("submitOrder");
+  if (button.disabled) return; // An order is already being sent
+  if (!cart.length) { error.textContent = "Your cart is empty."; return; }
   const t = totals();
   const order = orderNumber();
-  const button = $("submitOrder");
   button.disabled = true;
   button.textContent = "Sending...";
 
+  // Give up after 20 seconds so the button never stays stuck on "Sending...".
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 20000);
   try {
     const response = await fetch(ORDER_ENDPOINT, {
+      signal: controller.signal,
       method: "POST",
       headers: { "Content-Type": "application/json", Accept: "application/json" },
       body: JSON.stringify({
@@ -339,6 +340,7 @@ async function submitOrder(event) {
     cart = [];
     saveCart();
     form.reset();
+    syncDelivery();
     renderCart();
     form.hidden = true;
     const done = $("orderDone");
@@ -354,6 +356,7 @@ async function submitOrder(event) {
     error.textContent = "We could not send your order. Please try again, or ";
     error.append(link);
   } finally {
+    clearTimeout(timer);
     button.disabled = false;
     button.textContent = "Send order";
   }
@@ -363,10 +366,28 @@ async function submitOrder(event) {
 $("openCart").onclick = openCart;
 $("checkoutForm").addEventListener("submit", submitOrder);
 $("checkoutForm").addEventListener("input", renderTotals);
-$("checkoutForm").addEventListener("change", () => {
+// Shows the address box only when shipping is chosen.
+function syncDelivery() {
   $("addressField").hidden = $("checkoutForm").elements.delivery.value !== "ship";
-  renderTotals();
-});
+}
+$("checkoutForm").addEventListener("change", () => { syncDelivery(); renderTotals(); });
+syncDelivery();
+
+// Clicking the dark backdrop outside a dialog closes it.
+document.querySelectorAll("dialog").forEach((d) => d.addEventListener("click", (e) => {
+  const r = d.getBoundingClientRect();
+  const inside = e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
+  if (!inside && e.target === d) d.close();
+}));
+
+// Brief message at the bottom of the screen.
+function toast(message) {
+  const el = $("toast");
+  el.textContent = message;
+  el.classList.add("show");
+  clearTimeout(toast.timer);
+  toast.timer = setTimeout(() => el.classList.remove("show"), 2600);
+}
 renderFilters();
 renderGrid();
 renderCart();
@@ -391,14 +412,29 @@ if (customForm) {
     if (!file) { e.preventDefault(); err.textContent = "Attach your design file."; return; }
     if (!UPLOAD_TYPES.test(file.name)) { e.preventDefault(); err.textContent = "Use an STL, 3MF, STEP, SolidWorks, CATIA, PDF drawing or ZIP file."; return; }
     if (file.size > UPLOAD_LIMIT) { e.preventDefault(); err.textContent = `That file is ${(file.size / 1048576).toFixed(1)} MB. Zip it or email it to ${STORE.orderEmail} instead (10 MB maximum).`; return; }
+    // Flag requests that claim the student discount so it can be checked.
+    const school = customForm.elements.schoolEmail.value.trim();
+    customForm.elements.studentDiscount.value = !school ? "No" : isSchoolEmail(school) ? "Yes, verify school email" : "Requested, school not recognized";
     // Readable subject so requests stand out in the inbox.
     customForm.elements._subject.value = `Custom print request from ${customForm.elements.name.value.trim() || "a customer"}`;
     $("customSubmit").disabled = true;
     $("customSubmit").textContent = "Uploading...";
+  });
+  // Pages restored with the browser back button keep old state, so re-enable the button.
+  window.addEventListener("pageshow", () => {
+    $("customSubmit").disabled = false;
+    $("customSubmit").textContent = "Send for a quote";
   });
   // Show the confirmation after FormSubmit redirects back here.
   if (new URLSearchParams(location.search).get("sent") === "custom") {
     customForm.hidden = true;
     $("customDone").hidden = false;
   }
+  // "Send another file" clears the success flag from the address and shows the form again.
+  $("customAgain").addEventListener("click", () => {
+    history.replaceState(null, "", `${location.pathname}#custom`);
+    customForm.reset();
+    customForm.hidden = false;
+    $("customDone").hidden = true;
+  });
 }

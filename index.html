@@ -5,11 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Engineering Printing | 3D printed gear for engineers</title>
   <meta name="description" content="3D printed engine displays, workshop tools and desk upgrades for engineers, printed to order in the Greater Toronto Area.">
+  <link rel="canonical" href="https://engineeringprinting082-cmd.github.io/engineering-printing/">
+  <meta name="theme-color" content="#070d18">
+  <!-- Link previews on LinkedIn and other sites -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Engineering Printing">
+  <meta property="og:title" content="Engineering Printing | 3D printed gear for engineers">
+  <meta property="og:description" content="Engine displays, shop tools, desk upgrades and custom prints from your own CAD files. Printed to order in the GTA. Students save 10%.">
+  <meta property="og:url" content="https://engineeringprinting082-cmd.github.io/engineering-printing/">
+  <meta property="og:image" content="https://engineeringprinting082-cmd.github.io/engineering-printing/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23070d18'/%3E%3Ctext x='16' y='21' font-family='monospace' font-size='13' font-weight='700' fill='%235fd4ff' text-anchor='middle'%3EEP%3C/text%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
   <!-- The version number forces browsers to load new files after each update -->
-  <link rel="stylesheet" href="styles.css?v=5">
+  <link rel="stylesheet" href="styles.css?v=6">
 </head>
 <body>
   <header class="topbar">
@@ -86,6 +99,10 @@
           </label>
           <label>Quantity <input name="quantity" type="number" min="1" max="50" value="1" required></label>
         </div>
+        <label>School email for student discount (optional)
+          <input name="schoolEmail" type="email" placeholder="you@yourschool.ca">
+        </label>
+        <input type="hidden" name="studentDiscount" value="No">
         <label>Delivery
           <select name="delivery"><option>Ship in Canada ($12 flat)</option><option>GTA pickup (free)</option></select>
         </label>
@@ -96,7 +113,8 @@
       </form>
       <div id="customDone" class="custom-form" hidden>
         <h3>File received</h3>
-        <p class="lead">Thanks. We will review your design and email you a quote shortly.</p>
+        <p class="lead">Thanks. We will review your design and email you a quote shortly. If you do not hear back within two days, email engineeringprinting082@gmail.com.</p>
+        <button class="btn ghost" id="customAgain" type="button">Send another file</button>
       </div>
     </section>
 
@@ -128,12 +146,15 @@
     <p><a href="mailto:engineeringprinting082@gmail.com">engineeringprinting082@gmail.com</a></p>
   </footer>
 
-  <dialog id="productDialog" class="dialog">
+  <noscript><p class="noscript">This store needs JavaScript to show products and take orders. You can also order by email at engineeringprinting082@gmail.com.</p></noscript>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <dialog id="productDialog" class="dialog" aria-labelledby="productTitle">
     <form method="dialog"><button class="close" aria-label="Close">&times;</button></form>
     <div id="productBody"></div>
   </dialog>
 
-  <dialog id="cartDialog" class="dialog drawer">
+  <dialog id="cartDialog" class="dialog drawer" aria-label="Your cart">
     <form method="dialog"><button class="close" aria-label="Close">&times;</button></form>
     <h2>Your cart</h2>
     <div id="cartItems"></div>
@@ -162,8 +183,8 @@
     <div id="orderDone" hidden></div>
   </dialog>
 
-  <script src="products.js?v=5"></script>
-  <script src="art.js?v=5"></script>
-  <script src="app.js?v=5"></script>
+  <script src="products.js?v=6"></script>
+  <script src="art.js?v=6"></script>
+  <script src="app.js?v=6"></script>
 </body>
 </html>

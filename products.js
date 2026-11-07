@@ -73,7 +73,6 @@ const STORE = {
   shippingFlat: 12,        // Flat Canadian shipping in CAD
   studentRate: 0.10,       // 10% off item subtotal
   maxQuantity: 20,         // Larger orders should email directly
-  plaqueMaxChars: 24,
 };
 
 // Canadian school email domains accepted for the student discount. Any .edu
